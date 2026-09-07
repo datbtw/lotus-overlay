@@ -3,13 +3,13 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{12,13,14} )
+PYTHON_COMPAT=( python3_{12,13,14,15} )
 inherit cmake udev xdg python-any-r1
 
 DESCRIPTION="Vietnamese Bamboo input method for Fcitx5 (Lotus branch)"
 HOMEPAGE="https://lotusinputmethod.github.io/"
 
-BAMBOO_CORE_COMMIT="9197d2cc164380a80d219f12cc90576ff2fbf5e6"
+BAMBOO_CORE_COMMIT="78df8cb13f01119d93417f7bbb50b19aa7b3b278"
 BAMBOO_URI="https://github.com/LotusInputMethod/bamboo-core/archive"
 SRC_URI="
 	https://github.com/LotusInputMethod/fcitx5-lotus/archive/v${PV}.tar.gz -> ${P}.tar.gz
@@ -46,6 +46,7 @@ src_prepare() {
 	mv "${WORKDIR}/bamboo-core-${BAMBOO_CORE_COMMIT}" bamboo/bamboo-core || die
 
 	cmake_src_prepare
+	sed -i 's/uinput_proxy/uinput-proxy/g' data/fcitx5-lotus-server@.service || die
 }
 
 src_install() {
