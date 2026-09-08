@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{12,13,14,15} )
+PYTHON_COMPAT=( python3_{12..15} )
 inherit cmake udev xdg python-any-r1
 
 DESCRIPTION="Vietnamese Bamboo input method for Fcitx5 (Lotus branch)"
@@ -19,7 +19,6 @@ SRC_URI="
 LICENSE="GPL-3+ LGPL-2.1+"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="openrc"
 
 DEPEND="
 	>=app-i18n/fcitx-5.0.14:5
@@ -46,18 +45,14 @@ src_prepare() {
 	mv "${WORKDIR}/bamboo-core-${BAMBOO_CORE_COMMIT}" bamboo/bamboo-core || die
 
 	cmake_src_prepare
-	sed -i 's/uinput_proxy/uinput-proxy/g' data/fcitx5-lotus-server@.service || die
 }
 
-src_install() {
-	cmake_src_install
-
-	# udev rules, the systemd system unit, sysusers.d and modules-load.d
-	# entries are all installed directly by upstream's CMakeLists.txt
-
-	if use openrc; then
-		newinitd misc/fcitx5-lotus.openrc fcitx5-lotus-server
-	fi
+src_configure() {
+	local mycmakeargs=(
+		-DINSTALL_OPENRC=ON
+		-DLOTUS_UINPUT_PROXY_USER="uinput-proxy"
+	)
+	cmake_src_configure
 }
 
 pkg_postinst() {
@@ -66,13 +61,13 @@ pkg_postinst() {
 
 	elog "fcitx5-lotus-server needs access to /dev/uinput for the smooth"
 	elog "(uinput) typing mode. This is granted via a udev rule to the"
-	elog "'uinput_proxy' system user, created by acct-user/uinput-proxy."
+	elog "'uinput-proxy' system user, created by acct-user/uinput-proxy."
 	elog ""
 	elog "Enable the server with:"
 	elog "  systemctl enable --now fcitx5-lotus-server@\$(whoami).service"
 	elog ""
 	elog "For OpenRC, enable the corresponding init script instead:"
-	elog "  rc-update add fcitx5-lotus-server default"
+	elog "  rc-update add fcitx5-lotus default"
 }
 
 pkg_postrm() {
