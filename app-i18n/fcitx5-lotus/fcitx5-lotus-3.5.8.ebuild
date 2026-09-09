@@ -38,6 +38,7 @@ BDEPEND="
 	virtual/pkgconfig
 	dev-lang/go
 	${PYTHON_DEPS}
+	gnome-base/librsvg
 "
 
 src_prepare() {
