@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{12..15} )
+PYTHON_COMPAT=( python3_{12..14} )
 inherit cmake udev xdg python-any-r1
 
 DESCRIPTION="Vietnamese Bamboo input method for Fcitx5 (Lotus branch)"
