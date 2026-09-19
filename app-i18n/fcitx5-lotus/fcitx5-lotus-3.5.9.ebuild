@@ -1,0 +1,77 @@
+# Copyright 2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+PYTHON_COMPAT=( python3_{12..14} )
+inherit cmake udev xdg python-any-r1
+
+DESCRIPTION="Vietnamese Bamboo input method for Fcitx5 (Lotus branch)"
+HOMEPAGE="https://lotusinputmethod.github.io/"
+
+BAMBOO_CORE_COMMIT="f976d2d1f639fca86f798a8f978b6883c854d45b"
+BAMBOO_URI="https://github.com/LotusInputMethod/bamboo-core/archive"
+SRC_URI="
+	https://github.com/LotusInputMethod/fcitx5-lotus/archive/v${PV}.tar.gz -> ${P}.tar.gz
+	${BAMBOO_URI}/${BAMBOO_CORE_COMMIT}.tar.gz -> bamboo-core-${BAMBOO_CORE_COMMIT}.tar.gz
+"
+
+LICENSE="GPL-3+ LGPL-2.1+"
+SLOT="0"
+KEYWORDS="~amd64 ~x86"
+
+DEPEND="
+	>=app-i18n/fcitx-5.0.14:5
+	x11-libs/libX11
+	dev-libs/libinput
+	virtual/libudev
+"
+RDEPEND="${DEPEND}
+	acct-user/uinput-proxy
+	sys-apps/acl
+	dev-python/qtpy
+	dev-python/dbus-python
+"
+BDEPEND="
+	kde-frameworks/extra-cmake-modules
+	sys-devel/gettext
+	virtual/pkgconfig
+	dev-lang/go
+	${PYTHON_DEPS}
+	gnome-base/librsvg
+"
+
+src_prepare() {
+	rmdir bamboo/bamboo-core || die
+	mv "${WORKDIR}/bamboo-core-${BAMBOO_CORE_COMMIT}" bamboo/bamboo-core || die
+
+	cmake_src_prepare
+}
+
+src_configure() {
+	local mycmakeargs=(
+		-DINSTALL_OPENRC=ON
+		-DLOTUS_UINPUT_PROXY_USER="uinput-proxy"
+	)
+	cmake_src_configure
+}
+
+pkg_postinst() {
+	xdg_pkg_postinst
+	udev_reload
+
+	elog "fcitx5-lotus-server needs access to /dev/uinput for the smooth"
+	elog "(uinput) typing mode. This is granted via a udev rule to the"
+	elog "'uinput-proxy' system user, created by acct-user/uinput-proxy."
+	elog ""
+	elog "Enable the server with:"
+	elog "  systemctl enable --now fcitx5-lotus-server@\$(whoami).service"
+	elog ""
+	elog "For OpenRC, enable the corresponding init script instead:"
+	elog "  rc-update add fcitx5-lotus default"
+}
+
+pkg_postrm() {
+	xdg_pkg_postrm
+	udev_reload
+}
