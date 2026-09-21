@@ -41,6 +41,19 @@ BDEPEND="
 	gnome-base/librsvg
 "
 
+pkg_pretend() {
+	if use elibc_musl; then
+		die "${PN} does not support musl due to CGo runtime conflicts"
+	fi
+}
+
+pkg_setup() {
+	if use elibc_musl; then
+		die "${PN} does not support musl due to CGo runtime conflicts"
+	fi
+	python-any-r1_pkg_setup
+}
+
 src_prepare() {
 	rmdir bamboo/bamboo-core || die
 	mv "${WORKDIR}/bamboo-core-${BAMBOO_CORE_COMMIT}" bamboo/bamboo-core || die
