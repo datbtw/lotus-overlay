@@ -13,4 +13,4 @@ jobs:
       - name: Run pkgcheck
         uses: pkgcore/pkgcheck-action@v1
         with:
-          args: --commits
+          args: --commits origin/main..HEAD
