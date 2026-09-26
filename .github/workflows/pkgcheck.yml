@@ -7,6 +7,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Run pkgcheck
         uses: pkgcore/pkgcheck-action@v1
+        with:
+          args: --commits
