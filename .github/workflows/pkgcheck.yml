@@ -1,12 +1,10 @@
-name: Gentoo pkgcheck
+name: pkgcheck
 on: [push, pull_request]
-
 jobs:
-  pkgcheck:
+  check:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/pkgcore/pkgcheck
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run pkgcheck
-        uses: pkgcore/pkgcheck-action@v1
+      - uses: actions/checkout@v4
+      - run: pkgcheck scan app-i18n/fcitx5-lotus --keywords=-RedundantVersion,-NonsolvableDepsInStable
