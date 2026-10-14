@@ -14,7 +14,6 @@ LICENSE="GPL-3+ MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="test"
-RESTRICT="!test? ( test )"
 
 DEPEND="
 	>=app-i18n/fcitx-5.0.14:5
@@ -31,20 +30,10 @@ BDEPEND="
 	kde-frameworks/extra-cmake-modules
 	sys-devel/gettext
 	virtual/pkgconfig
-	dev-lang/go
 	${PYTHON_DEPS}
 "
 
-pkg_pretend() {
-	if use elibc_musl; then
-		die "${PN} does not support musl due to CGo runtime conflicts"
-	fi
-}
-
 pkg_setup() {
-	if use elibc_musl; then
-		die "${PN} does not support musl due to CGo runtime conflicts"
-	fi
 	python-any-r1_pkg_setup
 }
 
@@ -59,7 +48,7 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	newdoc bamboo/bamboo-core/LICENSE LICENSE.bamboo-core
+	newdoc lotus/LICENSE.bamboo-core LICENSE.bamboo-core
 }
 
 pkg_postinst() {
