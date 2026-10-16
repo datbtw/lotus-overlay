@@ -1,0 +1,21 @@
+From cfc5be675d2a428cd14359f552880bed7d2dd694 Mon Sep 17 00:00:00 2001
+From: Tran Tien Dat <testchatgpt2904@gmail.com>
+Date: Fri, 16 Oct 2026 16:08:07 +0700
+Subject: [PATCH] fix: add missing #include <sys/socket.h> for musl
+
+---
+ src/lotus-utils.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/lotus-utils.h b/src/lotus-utils.h
+index f60128c..6a33e2a 100644
+--- a/src/lotus-utils.h
++++ b/src/lotus-utils.h
+@@ -1,3 +1,4 @@
++#include <sys/socket.h>
+ /*
+  * SPDX-FileCopyrightText: 2025 Võ Ngô Hoàng Thành <thanhpy2009@gmail.com>
+  * SPDX-FileCopyrightText: 2026 Nguyễn Hoàng Kỳ  <nhktmdzhg@gmail.com>
+-- 
+2.56.0
+
