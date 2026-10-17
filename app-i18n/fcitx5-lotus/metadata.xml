@@ -13,7 +13,7 @@
 		server for seamless text replacement.
 	</longdescription>
 	<use>
-		<flag name="openrc">Install the OpenRC init script for fcitx5-lotus-server</flag>
+		<flag name="test">Enable ctest test suite</flag>
 	</use>
 	<upstream>
 		<remote-id type="github">LotusInputMethod/fcitx5-lotus</remote-id>
