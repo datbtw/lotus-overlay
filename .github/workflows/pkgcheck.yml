@@ -11,5 +11,5 @@ jobs:
         with:
           repository: gentoo/gentoo
           path: gentoo
-      - run: mkdir -p /var/db/repos && mv gentoo /var/db/repos/gentoo
+      - run: mkdir -p /var/db/repos && cp -r gentoo /var/db/repos/gentoo
       - run: pkgcheck scan app-i18n/fcitx5-lotus --keywords=-RedundantVersion,-NonsolvableDepsInStable
