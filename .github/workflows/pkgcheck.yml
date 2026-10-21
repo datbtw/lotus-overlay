@@ -21,4 +21,7 @@ jobs:
           echo "[lotus-overlay]" > /etc/portage/repos.conf/lotus-overlay.conf
           echo "location = /__w/lotus-overlay/lotus-overlay" >> /etc/portage/repos.conf/lotus-overlay.conf
           echo "masters = gentoo" >> /etc/portage/repos.conf/lotus-overlay.conf
+      - run: |
+          mkdir -p /etc/portage
+          ln -sf /var/db/repos/gentoo/profiles/default/linux/amd64/23.0 /etc/portage/make.profile
       - run: pkgcheck scan app-i18n/fcitx5-lotus --keywords=-RedundantVersion,-NonsolvableDepsInStable
